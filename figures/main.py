@@ -63,15 +63,6 @@ def find_figures(LB) -> dict:
                 if are_same(coords, figures[j]) and np.all(figure_i == figure_j):
                     unions[j] = i
 
-    # arr = figures
-    # for i, coords in enumerate(arr):
-    #     ys, xs = coords
-    #     figure = LB[ys[0]:ys[1] + 1, xs[0]:xs[1] + 1]
-    #
-    #     plt.subplot(2, 12, i+1)
-    #     plt.imshow(figure)
-    #     plt.title(f"{i+1}) {'unique' if unions[i] == -1 else unions[i]+1}")
-
     result = dict()
     for i, union in enumerate(unions):
         if union == -1:
@@ -82,7 +73,7 @@ def find_figures(LB) -> dict:
     return result
 
 
-image = np.load("figures/ps.npy.txt")#[896:971, 491:590]
+image = np.load("figures/ps.npy.txt")
 labeled = ski_label(image)
 
 print(f"Количество фигур: {np.max(labeled)}")
