@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage.measure import label, regionprops
+from skimage.measure import label, regionprops, euler_number
 from collections import defaultdict
 from pprint import pprint
 from pathlib import Path
@@ -16,11 +16,12 @@ def extractor(region):
     cy, cx = region.local_centroid
     cy /= region.image.shape[0]
     cx /= region.image.shape[1]
-    eul = region.euler_number
+    eul = euler_number(region.image, connectivity=1)
     eccentricity = region.eccentricity
     have_vl = np.sum(np.mean(region.image, axis=0) == 1) > 3
+    area_filled = region.area_filled / region.image.size
     
-    return np.array([area, perimeter, cy, cx, eul, eccentricity, have_vl])
+    return np.array([area, perimeter, cy, cx, eul, eccentricity, have_vl, area_filled])
 
 
 def classificator(region, classes):
@@ -70,7 +71,7 @@ for i, region in enumerate(regionprops(image_labeled)):
     symbols[symbol] += 1
     
     plt.cla()
-    plt.title(f"Symbol - {symbol}, {region.euler_number}")
+    plt.title(f"Symbol - {symbol}")
     plt.imshow(region.image)
     plt.savefig(path/ f"image_{i:03d}.png")
     
