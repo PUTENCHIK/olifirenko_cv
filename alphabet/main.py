@@ -67,20 +67,19 @@ image_labeled = label(image)
 result = defaultdict(lambda: 0)
 regions = regionprops(image_labeled)
 
-path = Path("alphabet/images")
-path.mkdir(exist_ok=True)
+# path = Path("alphabet/images")
+# path.mkdir(exist_ok=True)
 
 plt.figure()
 for i, region in enumerate(regions):
     symbol = recognize(region)
-    print(f"{i}) {symbol}")
     result[symbol] += 1
-    # if i < 50:
-    plt.cla()
-    plt.title(f"Symbol - {symbol}")
-    plt.imshow(region.image)
-    plt.savefig(path/ f"image_{i:03d}.png")
+
+    # Сохранение символов
+    # print(f"{i}) {symbol}")
+    # plt.cla()
+    # plt.title(f"Symbol - {symbol}")
+    # plt.imshow(region.image)
+    # plt.savefig(path/ f"image_{i:03d}.png")
 
 pprint(result)
-# plt.imshow(image)
-# plt.show()
