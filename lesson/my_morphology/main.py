@@ -1,5 +1,6 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 
 def dilation(B, struct):
@@ -36,7 +37,8 @@ struct = np.ones((3, 3))
 #                    [1, 1, 1],
 #                    [0, 1, 0],])
 
-image = np.load("lesson/morph-array.npy")
+path = Path(__file__).parent
+image = np.load(path/ "morph-array.npy")
 plt.subplot(231)
 plt.imshow(image)
 

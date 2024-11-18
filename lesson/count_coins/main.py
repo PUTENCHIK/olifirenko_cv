@@ -1,13 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.measure import label
+from pathlib import Path
 
 
 def area(LB, label=1):
     return np.sum(LB == label)
 
 
-B = np.load("lesson/coins.npy")
+path = Path(__file__).parent
+B = np.load(path/ "coins.npy")
 B = label(B)
 
 nominals = [1, 2, 5, 10]

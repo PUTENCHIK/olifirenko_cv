@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 from skimage.filters import threshold_otsu, sobel
 from skimage.measure import label, regionprops
 from skimage.segmentation import flood_fill
+from pathlib import Path
 
 
-image = plt.imread("lesson/lama_on_moon.png")[80:-40, 60:-40]
+path = Path(__file__).parent
+image = plt.imread(path/ "lama_on_moon.png")[80:-40, 60:-40]
 
 gray = np.mean(image, axis=2)
 conts = sobel(gray)

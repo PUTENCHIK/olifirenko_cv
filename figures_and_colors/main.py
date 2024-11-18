@@ -5,9 +5,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage.measure import label, regionprops
 from skimage.color import rgb2hsv
+from pathlib import Path
 
 
-im = plt.imread("lesson/balls.png")
+path = Path(__file__).parent
+im = plt.imread(path/ "balls_and_rects.png")
 binary = im.copy().mean(2)
 binary[binary > 0] = 1
 labeled = label(binary)
