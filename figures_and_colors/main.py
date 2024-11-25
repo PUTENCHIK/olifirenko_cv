@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 path = Path(__file__).parent
-im = plt.imread(path/ "balls_and_rects.png")[:500, :500]
+im = plt.imread(path/ "balls_and_rects.png")
 
 binary = im.copy().mean(2)
 binary[binary > 0] = 1
@@ -45,13 +45,15 @@ for i, region in enumerate(regions):
     if flag:
         colors[float(color)][is_rect] = 1
 
+for i, key in enumerate(colors):
+    print(f"{i+1}) {key}: circles: {colors[key][0]}, rects: {colors[key][1]}")
 
-pprint(unique_colors)
-pprint(colors)
+plt.subplot(1, 2, 1)
+plt.imshow(im)
+plt.title(f"Figures: {len(regions)}")
 
-# plt.subplot(1, 2, 1)
-# plt.imshow(im_hsv[:, :, 0] == 0.6111111044883728)
-# plt.subplot(1, 2, 2)
-# plt.imshow(im_hsv)
-# plt.title(f"Figures: {len(regions)}")
-# plt.show()
+plt.subplot(1, 2, 2)
+plt.plot(sorted(unique_colors), 'o')
+plt.title(f"Shades: {len(colors)}")
+
+plt.show()
