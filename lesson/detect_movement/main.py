@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 window_name = "Camera"
@@ -12,6 +11,7 @@ camera.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
 camera.set(cv2.CAP_PROP_EXPOSURE, 10)
 
 background = None
+prev_thresh = None
 while camera.isOpened():
     ret, frame = camera.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -21,6 +21,14 @@ while camera.isOpened():
         delta = cv2.absdiff(background, gray)
         thresh = cv2.threshold(delta, 25, 255, cv2.THRESH_BINARY)[1]
         thresh = cv2.dilate(thresh, None, iterations=2)
+        
+        if prev_thresh is not None:
+            diff = cv2.absdiff(thresh, prev_thresh)
+            changes = np.sum(diff) / diff.size / 255
+            if changes < 0.05:
+                background = gray.copy()
+        prev_thresh = thresh
+        
         contours, _ = cv2.findContours(thresh.copy(),
                                        cv2.RETR_EXTERNAL,
                                        cv2.CHAIN_APPROX_SIMPLE)
