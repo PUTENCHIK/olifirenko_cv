@@ -11,19 +11,50 @@ def dist(p1: tuple, p2: tuple) -> float:
     return ((x1 - x2)**2 + (y1 - y2)**2)**0.5
 
 
-def find_nearest(center: tuple, regions) -> tuple:
+def find_nearest(centers: tuple, regions, visited: list) -> tuple:
     minn = 1e6
-    nearest = None
-    # print(f"center: {center}")
-    for region in regions:
-        d = dist(center, region.centroid)
-        # print(f"{i+1}) {region.centroid}: {d}")
-        if d < minn:
-            minn = d
-            nearest = region.centroid
+    index = None
+    for i, region in enumerate(regions):
+        if i not in visited:
+            dists = np.array([dist(center, region.centroid) for center in centers])
+            if dists.mean() < minn:
+                minn = dists.mean()
+                index = i
     
-    # print()
-    return nearest
+    return regions[index].centroid, index
+            
+
+
+def plot_differencies(trajectory):
+    diffs = np.abs(trajectory[1:] - trajectory[:-1])
+    plt.plot(diffs, 'o')
+    plt.show()
+
+
+def show_images(trajectories, images):
+    plt.ion()
+    for i, image in enumerate(images):
+        plt.clf()
+        plt.title(i)
+        plt.imshow(image)
+        for j, trajectory in enumerate(trajectories):
+            plt.scatter(trajectory[i][0],
+                        trajectory[i][1],
+                        c=['blue', 'red', 'green'][j],
+                        s=3)
+        
+        plt.pause(1)
+
+
+def plot_trajectories(trajectories):
+    for i, trajectory in enumerate(trajectories):
+        # plt.plot(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
+        plt.scatter(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
+
+    plt.legend()
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.show()
 
 
 path = Path(__file__).parent / "motion/"
@@ -35,6 +66,7 @@ trajectories = list()
 for index, frame in enumerate(images):
     labeled = label(frame)
     regions = regionprops(labeled)
+    visited = list()
 
     if len(trajectories) == 0:
         for region in regions:
@@ -42,38 +74,16 @@ for index, frame in enumerate(images):
             trajectories += [[(float(cx), float(cy))]]
     else:
         for i, obj_trajectory in enumerate(trajectories):
-            last_center = obj_trajectory[-1]
-            ny, nx = find_nearest(last_center, regions)
+            depth = 3
+            last_centers = obj_trajectory[-depth:]
+            (ny, nx), index = find_nearest(last_centers,
+                                           regions,
+                                           visited)
 
             trajectories[i] += [(float(nx), float(ny))]
+            visited += [index]
 
 
 trajectories = np.array(trajectories)
-# print(trajectories)
 
-# for i, trajectory in enumerate(trajectories):
-#     if (i == 0):
-#         print(trajectory)
-#         # plt.scatter(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
-#         plt.plot(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
-
-# plt.legend()
-# plt.xlabel("x")
-# plt.ylabel("y")
-# plt.show()
-
-# n = 4
-# trajectory = trajectories[0]
-# print(trajectory)
-# diffs = np.abs(trajectory[1:] - trajectory[:-1])
-# plt.plot(diffs, 'o')
-# plt.show()
-
-n = 16
-# print(trajectories[0, 42:46])
-for i in range(n):
-    plt.subplot(4, 4, i+1)
-    plt.title(i)
-    plt.imshow(images[i])
-
-plt.show()
+plot_trajectories(trajectories)
