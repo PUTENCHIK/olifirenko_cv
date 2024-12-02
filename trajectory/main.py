@@ -48,8 +48,8 @@ def show_images(trajectories, images):
 
 def plot_trajectories(trajectories):
     for i, trajectory in enumerate(trajectories):
-        # plt.plot(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
-        plt.scatter(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
+        plt.plot(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
+        # plt.scatter(trajectory[:, 0], trajectory[:, 1], label=f"{i+1}")
 
     plt.legend()
     plt.xlabel("x")
