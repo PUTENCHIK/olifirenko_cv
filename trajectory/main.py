@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage.measure import regionprops, label
@@ -58,9 +59,10 @@ def plot_trajectories(trajectories):
 
 
 path = Path(__file__).parent / "motion/"
-files = sorted([str(file) for file in path.glob("*.npy")])
-images = [np.load(file).astype(int) for file in files]
+files = sorted([str(file) for file in path.glob("*.npy")],
+                key=lambda s: int(re.findall(r'\d+', s)[-1]))
 
+images = [np.load(file).astype(int) for file in files]
 trajectories = list()
 
 for index, frame in enumerate(images):
@@ -87,3 +89,4 @@ for index, frame in enumerate(images):
 trajectories = np.array(trajectories)
 
 plot_trajectories(trajectories)
+# show_images(trajectories, images)
