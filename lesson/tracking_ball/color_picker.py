@@ -31,6 +31,9 @@ while camera.isOpened():
                    5, (255, 255, 0), 2)
         cv2.putText(frame, f"Color HSV = {pixel_hsv}", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0))
+        
+        cv2.putText(frame, f"Limits = {limits}", (10, 100),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0))
     
     cv2.imshow(window_name, frame)
     key = cv2.waitKey(1)
