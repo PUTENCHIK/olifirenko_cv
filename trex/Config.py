@@ -1,11 +1,12 @@
 class Config:
     START_PAUSE = 0
-    AUTO_ALT_TAB = True
     KEY_QUIT_OPENCV = 'q'
 
-    start_padding = [150, 300, 300, 300]
+    start_padding = 100
+    default_game_area_width = 521
+    default_game_area_height = 119
 
-    trex_color_limits = (123, 128)
+    trex_color_limits = 83
 
     # начальное соотношение ближайшего x объектов к ширине игровой области
     default_ratio_for_jump = 0.07
